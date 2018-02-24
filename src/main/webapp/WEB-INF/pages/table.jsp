@@ -1,6 +1,6 @@
 <html>
 <title>Data table</title>
-<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
   
 <script
   src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -36,6 +36,8 @@
         $('#example').DataTable( {
             "processing": true,
             "serverSide": true,
+            "paging":   true,
+            "order": [[ 0, 'asc' ], [ 1, 'asc' ]],
             "ajax": "/datatable/producer/data/strings"
         } );
     } );

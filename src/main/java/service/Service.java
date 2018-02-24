@@ -19,7 +19,7 @@ public class Service {
 	@Path("/strings")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAll() {
-		final int size = 100; 
+		final int size = 23; 
 		String[][] items = new String[size][];
 		for (int i = 0; i < size; i++) {
 			items[i] = dao.getRow();
@@ -27,8 +27,8 @@ public class Service {
 
 		final TableData model = new TableData();
 		model.setDraw(1);
-		model.setRecordsTotal(2);
-		model.setRecordsFiltered(2);
+		model.setRecordsTotal(size);
+		model.setRecordsFiltered(size);
 		model.setData(items);
 		Gson gson = new Gson();
 		return gson.toJson(model);
