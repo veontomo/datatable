@@ -1,16 +1,16 @@
 package model;
 
 public class TableData {
-	private int draw;
+//	private int draw;
 	private int recordsTotal;
 	private int recordsFiltered;
 	private String[][]  data;
-	public int getDraw() {
-		return draw;
-	}
-	public void setDraw(int draw) {
-		this.draw = draw;
-	}
+//	public int getDraw() {
+//		return draw;
+//	}
+//	public void setDraw(int draw) {
+//		this.draw = draw;
+//	}
 	public int getRecordsTotal() {
 		return recordsTotal;
 	}

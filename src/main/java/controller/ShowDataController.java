@@ -12,8 +12,14 @@ public class ShowDataController {
 		return "welcome";
 	}
 	
-	@RequestMapping(value = "/table", method = RequestMethod.GET)
-	public String getData(ModelMap model) {
-		return "table";
+	@RequestMapping(value = "/clientside", method = RequestMethod.GET)
+	public String getDataClient(ModelMap model) {
+		return "client-side";
 	}
+	
+	@RequestMapping(value = "/serverside", method = RequestMethod.GET)
+	public String getDataServer(ModelMap model) {
+		return "server-side";
+	}
+
 }

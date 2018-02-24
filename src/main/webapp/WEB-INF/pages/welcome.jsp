@@ -7,6 +7,8 @@
 <title>Welcome</title>
 </head>
 <body>
-Hello!
+<a href="/datatable/consumer/clientside">Client-side rendering</a>
+<br>
+<a href="/datatable/consumer/serverside">Server-side rendering</a>
 </body>
 </html>
