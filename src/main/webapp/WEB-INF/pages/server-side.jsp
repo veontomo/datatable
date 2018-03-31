@@ -1,18 +1,16 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <title>Data table server side</title>
 <link rel="stylesheet" type="text/css"
-	href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+	href="<c:url value="/resources/css/datatables.min.css"/>">
 
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-	crossorigin="anonymous"></script>
-<script type="text/javascript" charset="utf8"
-	src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/jquery-3.3.1.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/datatables.min.js"/>"></script>
 <body>
 	<a href="/datatable/consumer/clientside">Client-side rendering</a>
 	<h1>Data Table client side</h1>
 	<ol id="requestList"></ol>
-	<table id="example" class="display" cellspacing="0" width="100%">
+	<table id="example" class="display" style="width:100%">
 		<thead>
 			<tr>
 				<th>First name</th>

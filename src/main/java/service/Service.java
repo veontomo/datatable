@@ -14,18 +14,20 @@ import model.TableData;
 public class Service {
 	private TableDataDao dao = new TableDataDao();
 	
+	private final int totalSize = 188;
+	
 	@GET
 	@Path("/strings")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAll() {
-		final int size = 100; 
+		final int size = 5; 
 		String[][] items = new String[size][];
 		for (int i = 0; i < size; i++) {
 			items[i] = dao.getRow();
 		}
 
 		final TableData model = new TableData();
-		model.setRecordsTotal(size);
+		model.setRecordsTotal(totalSize);
 		model.setRecordsFiltered(size);
 		model.setData(items);
 		Gson gson = new Gson();

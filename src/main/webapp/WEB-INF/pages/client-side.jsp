@@ -1,12 +1,9 @@
 <html>
 <title>Data table</title>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
-  
-<script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
-<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="/datatable/consumer/css/datatables.min.css">  
+<script type="text/javascript" src="/datatable/consumer/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/datatable/consumer/js/datatables.min.js"></script>
 <body>
 	<a href="/datatable/consumer/serverside">Server-side rendering</a>
 	<h1>Data Table client side</h1>
