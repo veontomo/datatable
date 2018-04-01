@@ -1,0 +1,1 @@
+f:\Users\Andrea\Programs\curl\src\curl.exe -X POST -H "Content-Type: application/json" -d "{\"screen\":\"red\",\"pc\":44}" http://localhost:8080/datatable/consumer/data/persons

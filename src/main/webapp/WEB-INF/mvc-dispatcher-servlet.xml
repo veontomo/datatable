@@ -26,4 +26,8 @@
 		cache-period="31556926" />
 	<mvc:annotation-driven />
 
+	<mvc:interceptors>
+		<bean class="controller.Intersceptor" />
+	</mvc:interceptors>
+
 </beans>

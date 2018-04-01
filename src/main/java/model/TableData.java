@@ -1,16 +1,18 @@
 package model;
 
+import java.util.List;
+
 public class TableData {
-//	private int draw;
+	private int draw;
 	private int recordsTotal;
 	private int recordsFiltered;
-	private String[][]  data;
-//	public int getDraw() {
-//		return draw;
-//	}
-//	public void setDraw(int draw) {
-//		this.draw = draw;
-//	}
+	private List<Person>  data;
+	public int getDraw() {
+		return draw;
+	}
+	public void setDraw(int draw) {
+		this.draw = draw;
+	}
 	public int getRecordsTotal() {
 		return recordsTotal;
 	}
@@ -23,10 +25,10 @@ public class TableData {
 	public void setRecordsFiltered(int recordsFiltered) {
 		this.recordsFiltered = recordsFiltered;
 	}
-	public String[][] getData() {
+	public List<Person> getData() {
 		return data;
 	}
-	public void setData(String[][] data) {
+	public void setData(List<Person> data) {
 		this.data = data;
 	}
 
