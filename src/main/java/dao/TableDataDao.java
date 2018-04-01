@@ -19,4 +19,9 @@ public class TableDataDao {
 		final Name name = faker.name();
 		return new Person( name.firstName(), name.lastName(), faker.company().profession() );
 	}
+	
+	public Person getRow(String firstName) {
+        final Name name = faker.name();
+        return new Person( firstName, name.lastName(), faker.company().profession() );
+    }
 }

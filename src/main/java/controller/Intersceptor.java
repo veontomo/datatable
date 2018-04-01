@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,8 +15,12 @@ public class Intersceptor extends HandlerInterceptorAdapter {
         System.out.println("preHandle: new " + request.getMethod() + " request");
         System.out.println("content type: " + request.getContentType());
         System.out.println("query string: " + request.getQueryString());
-        System.out.println("parameter names: " + request.getParameterNames());
-        
+        System.out.println("parameter names: ");
+        final Enumeration<String> names = request.getParameterNames();
+        while (names.hasMoreElements()) {
+            final String name = names.nextElement();
+            System.out.println(name + " -> " + request.getParameter(name));
+        }
         return true;
     }
 

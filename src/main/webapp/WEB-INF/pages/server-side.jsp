@@ -12,6 +12,12 @@
 <body>
 	<a href="/datatable/consumer/clientside">Client-side rendering</a>
 	<h1>Data Table client side</h1>
+	<form name="control">
+		<label for="screen-id">Name</label> <input type="text" name="name"
+			id="screen-id"> <label for="code-id">Age</label> <select
+			name="age" id="code-id"><option value="1">&lt;10</option>
+			<option value="2">&ge;10</option></select>
+	</form>
 	<ol id="requestList"></ol>
 	<table id="table" class="display" style="width: 100%">
 		<thead>

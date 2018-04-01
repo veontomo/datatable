@@ -1,22 +1,28 @@
 package model;
 
-public class DatatableControl {
-    
-    private final String screen;
-    private final Integer pc;
+public class DatatableControl extends PersonModel {
 
-    public DatatableControl(String screen, Integer pc) {
-        this.screen = screen;
-        this.pc = pc;
+    private final Integer start;
+    private final Integer length;
+    private final Integer draw;
+
+    public DatatableControl(Integer start, Integer length, Integer draw, String name, Integer age) {
+        super(name, age);
+        this.start = start;
+        this.length = length;
+        this.draw = draw;
     }
 
-    public String getScreen() {
-        return screen;
+    public Integer getStart() {
+        return start;
     }
 
-    public Integer getPc() {
-        return pc;
+    public Integer getLength() {
+        return length;
     }
 
+    public Integer getDraw() {
+        return draw;
+    }
 
 }

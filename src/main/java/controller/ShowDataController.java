@@ -40,30 +40,29 @@ public class ShowDataController {
         return "server-side";
     }
 
-    // curl.exe -X POST -d "{\"name\":\"Mario\"}" -H "Content-Type:
-    // application/json" http://localhost:8080/datatable/consumer/data/strings-2
-    
-    
-    // curl.exe -X POST -d "{\"columns\":[[0]]}" -H "Content-Type: application/json" http://localhost:8080/datatable/consumer/data/persons?columns[0][1]=2
-    @RequestMapping(value = "/data/persons", method = { RequestMethod.POST,
-            RequestMethod.GET },  produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/data/persons", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public TableData getPersons(@RequestBody DatatableControl obj) {
-        final int size = 15;
+    public String getPersons(@RequestBody DatatableControl obj) {
+        final int size = obj.getLength();
         List<Person> items = new ArrayList<>();
         for (int i = 0; i < size; i++) {
-            items.add(dao.getRow());
+            final String name = obj.getName();
+            if (name == null || name.isEmpty()) {
+                items.add(dao.getRow());
+            } else {
+                items.add(dao.getRow(name));
+            }
         }
 
         final TableData model = new TableData();
         model.setRecordsTotal(totalSize);
         model.setRecordsFiltered(totalSize);
-        model.setDraw(2);
+        model.setDraw(obj.getDraw());
         model.setData(items);
         Gson gson = new Gson();
         final String result = gson.toJson(model);
         System.out.println("result: " + result);
-        return model;
+        return result;
 
     }
 
