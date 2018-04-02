@@ -38,7 +38,7 @@ public class ShowDataController {
 
     @RequestMapping(value = "/data/persons", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String getPersons(@RequestBody DatatableControl obj) {
+    public TableData getPersons(@RequestBody DatatableControl obj) {
         final int size = db.getSize();
         final int start = obj.getStart();
         final int length = obj.getLength();
@@ -57,10 +57,7 @@ public class ShowDataController {
         model.setRecordsFiltered(size);
         model.setDraw(obj.getDraw());
         model.setData(items);
-        Gson gson = new Gson();
-        final String result = gson.toJson(model);
-        System.out.println("result: " + result);
-        return result;
+        return model;
 
     }
     

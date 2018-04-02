@@ -16,12 +16,13 @@
 		<label for="name">Name</label> <input type="text" name="name"
 			id="name"> <label for="position">Position</label> <select
 			name="position" id="position"><option value="all">all</option>
-			</select>
+		</select>
 	</form>
 	<ol id="requestList"></ol>
 	<table id="table" class="display" style="width: 100%">
 		<thead>
 			<tr>
+				<th>id</th>
 				<th>First name</th>
 				<th>Last name</th>
 				<th>Position</th>

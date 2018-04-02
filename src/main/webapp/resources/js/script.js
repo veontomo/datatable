@@ -25,6 +25,8 @@ function initTable() {
 
 				},
 				"columns" : [ {
+					data : "id"
+				}, {
 					data : "name"
 				}, {
 					data : "surname"
