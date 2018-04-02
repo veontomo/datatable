@@ -21,6 +21,7 @@ import model.TableData;
 @Controller
 public class ShowDataController {
     private final FakeDb db = new FakeDb();
+
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String root(ModelMap model) {
         return "welcome";
@@ -38,34 +39,29 @@ public class ShowDataController {
 
     @RequestMapping(value = "/data/persons", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public TableData getPersons(@RequestBody DatatableControl obj) {
+    public TableData getPersons(@RequestBody DatatableControl filter) {
         final int size = db.getSize();
-        final int start = obj.getStart();
-        final int length = obj.getLength();
 
         List<Person> items = new ArrayList<>();
-        int pointer = 0;
-        while(pointer < length && pointer + start < size) {
-            final String[] row = db.getRow(pointer + start); 
+        final String[][] rows = db.getRows(filter);
+        System.out.println("rows contains " + rows.length + " lines");
+        for (final String[] row : rows) {
             items.add(new Person(Integer.parseInt(row[0]), row[1], row[2], row[3]));
-            pointer++;
         }
-
 
         final TableData model = new TableData();
         model.setRecordsTotal(size);
         model.setRecordsFiltered(size);
-        model.setDraw(obj.getDraw());
+        model.setDraw(filter.getDraw());
         model.setData(items);
         return model;
 
     }
-    
-    
+
     @RequestMapping(value = "/data/positions", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String[] getPositions() {
-        return  db.getUniqueColumnValues(3);
+        return db.getUniqueColumnValues(3);
     }
 
 }
