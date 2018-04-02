@@ -2,17 +2,17 @@ package model;
 
 public class PersonModel {
     private final String name;
-    private final Integer age;
+    private final String position;
 
     
 
-    public PersonModel(String name, Integer age) {
+    public PersonModel(String name, String position) {
         this.name = name;
-        this.age = age;
+        this.position = position;
     }
 
-    public Integer getAge() {
-        return age;
+    public String getPosition() {
+        return position;
     }
     
     public String getName() {

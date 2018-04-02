@@ -6,8 +6,8 @@ public class DatatableControl extends PersonModel {
     private final Integer length;
     private final Integer draw;
 
-    public DatatableControl(Integer start, Integer length, Integer draw, String name, Integer age) {
-        super(name, age);
+    public DatatableControl(Integer start, Integer length, Integer draw, String name, String position) {
+        super(name, position);
         this.start = start;
         this.length = length;
         this.draw = draw;

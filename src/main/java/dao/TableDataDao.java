@@ -9,19 +9,19 @@ import com.github.javafaker.Name;
 import model.Person;
 
 public class TableDataDao {
-	private final Faker faker = new Faker(new Locale("en-GB"), new Random(1));
+    private final Faker faker = new Faker(new Locale("en-GB"), new Random(1));
 
-	public String getName() {
-		return faker.name().firstName();
-	}
+    public String getName() {
+        return faker.name().firstName();
+    }
 
-	public Person getRow() {
-		final Name name = faker.name();
-		return new Person( name.firstName(), name.lastName(), faker.company().profession() );
-	}
-	
-	public Person getRow(String firstName) {
+    public Person getRow() {
         final Name name = faker.name();
-        return new Person( firstName, name.lastName(), faker.company().profession() );
+        return new Person(1, name.firstName(), name.lastName(), faker.company().profession());
+    }
+
+    public Person getRow(String firstName) {
+        final Name name = faker.name();
+        return new Person(1, firstName, name.lastName(), faker.company().profession());
     }
 }
