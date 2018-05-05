@@ -4,6 +4,8 @@
 <title>Data table server side</title>
 <link rel="stylesheet" type="text/css"
 	href="<c:url value="/resources/css/datatables.min.css"/>">
+<link rel="stylesheet" type="text/css"
+	href="<c:url value="/resources/css/custom.css"/>">
 
 <script type="text/javascript"
 	src="<c:url value="/resources/js/jquery-3.3.1.min.js"/>"></script>
