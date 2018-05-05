@@ -31,8 +31,6 @@ function hasClass(elem, name) {
  * @returns
  */
 function generateInfoBlock(data, label) {
-	console.log('row', row);
-	console.log('data', data);
 	var row = document.createElement('tr');
 	row.className = 'info-box';
 	var cell = document.createElement('td');
@@ -49,24 +47,51 @@ function generateInfoBlock(data, label) {
 }
 
 /**
- * Add or remove an info block after the given row.
+ * Add or remove an name block after the given row.
  * 
- * @param row
+ * @param element
  * @param data
+ * @param callback
+ *            two argument function that returns an html node that is to be
+ *            inserted after the element
  */
-function toggleInfoBlock(row, data) {
+function toggleInfoBlock(element, data, callback) {
 	var className = 'info-box';
-	var nextRow = row.nextSibling;
+	var nextRow = element.nextSibling;
 	if (hasClass(nextRow, className)) {
-		row.parentNode.removeChild(nextRow);
+		element.parentNode.removeChild(nextRow);
 	} else {
-		var infoRow = generateInfoBlock(data, className);
+		var infoRow = callback(data, className);
 		if (nextRow) {
-			row.parentNode.insertBefore(infoRow, nextRow);
+			element.parentNode.insertBefore(infoRow, nextRow);
 		} else {
-			row.parentNode.appendChild(infoRow);
+			element.parentNode.appendChild(infoRow);
 		}
 	}
+}
+
+/**
+ * Create a surname block.
+ * 
+ * @param data
+ */
+function createSurnameData(data) {
+	var className = 'info-box';
+	var node = generateInfoBlock({surname: data.surname}, className);
+	node.className += ' surname-box';
+	return node;
+}
+
+/**
+ * Create a name block.
+ * 
+ * @param data
+ */
+function createNameData(data) {
+	var className = 'info-box';
+	var node = generateInfoBlock({name: data.name}, className);
+	node.className += ' name-box';
+	return node;
 }
 
 function initTable() {
@@ -105,10 +130,16 @@ function initTable() {
 							row.className += " " + name;
 							console.log("row", row);
 						}
-						row.addEventListener('click', function() {
-							console.log("click on row ", this);
-							toggleInfoBlock(this, data);
-						})
+						row.querySelector('.name').addEventListener('click',
+								function(e) {
+									toggleInfoBlock(row, data, createNameData);
+								}, true);
+						row.querySelector('.surname').addEventListener(
+								'click',
+								function(e) {
+									toggleInfoBlock(row, data,
+											createSurnameData);
+								});
 
 					}
 				},
@@ -120,6 +151,13 @@ function initTable() {
 					data : "surname"
 				}, {
 					data : "mansion"
+				} ],
+				columnDefs : [ {
+					targets : 1,
+					className : 'name'
+				}, {
+					targets : 2,
+					className : 'surname'
 				} ]
 			});
 

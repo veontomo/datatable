@@ -2,3 +2,13 @@
 	color: #2d32da;
 	font-weight: bold;
 }
+
+.surname-box {
+	color: #101010;
+	font-size: 1em;
+}
+
+.name-box {
+	color: navy;
+	font-size: 1.5em;
+}
