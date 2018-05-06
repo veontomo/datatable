@@ -13,9 +13,8 @@ var control = document.querySelector('form[name="control"]');
  */
 function hasClass(elem, name) {
 	if (elem && name) {
-		var allNameStr = elem.className;
-		if (allNameStr) {
-			var names = allNameStr.split(/\s+/);
+		var names = getClassNames(elem);
+		if (names) {
 			return names.indexOf(name) != -1;
 		}
 	}
@@ -34,6 +33,7 @@ function generateInfoBlock(data, label) {
 	var row = document.createElement('tr');
 	row.className = 'info-box';
 	var cell = document.createElement('td');
+	cell.colSpan = 4;
 	for ( var key in data) {
 		if (data.hasOwnProperty(key)) {
 			var d = document.createElement('div');
@@ -47,37 +47,15 @@ function generateInfoBlock(data, label) {
 }
 
 /**
- * Add or remove an name block after the given row.
- * 
- * @param element
- * @param data
- * @param callback
- *            two argument function that returns an html node that is to be
- *            inserted after the element
- */
-function toggleInfoBlock(element, data, callback) {
-	var className = 'info-box';
-	var nextRow = element.nextSibling;
-	if (hasClass(nextRow, className)) {
-		element.parentNode.removeChild(nextRow);
-	} else {
-		var infoRow = callback(data, className);
-		if (nextRow) {
-			element.parentNode.insertBefore(infoRow, nextRow);
-		} else {
-			element.parentNode.appendChild(infoRow);
-		}
-	}
-}
-
-/**
  * Create a surname block.
  * 
  * @param data
  */
 function createSurnameData(data) {
 	var className = 'info-box';
-	var node = generateInfoBlock({surname: data.surname}, className);
+	var node = generateInfoBlock({
+		surname : data.surname
+	}, className);
 	node.className += ' surname-box';
 	return node;
 }
@@ -89,9 +67,108 @@ function createSurnameData(data) {
  */
 function createNameData(data) {
 	var className = 'info-box';
-	var node = generateInfoBlock({name: data.name}, className);
+	var node = generateInfoBlock({
+		name : data.name
+	}, className);
 	node.className += ' name-box';
 	return node;
+}
+
+/**
+ * 
+ * Add or remove an info block as a next child parent node.
+ * 
+ * @param elem
+ * @param parent
+ *            elem's parent node
+ * @param data
+ * @param generator
+ *            two argument function that returns an html node that is to be
+ *            inserted after the element
+ * @returns
+ */
+function toggleInfoBlock(elem, parent, data, generator) {
+	var name = 'active';
+	if (hasClass(elem, name)) {
+		var nextRow = parent.nextSibling;
+		parent.parentNode.removeChild(nextRow);
+		unmark(elem, name);
+
+	} else {
+		var siblings = parent.childNodes;
+		var marked = $(siblings).toArray().filter(function(n) {
+			return hasClass(n, name);
+		});
+		var numberOfMarkedElems = marked.length;
+		if (numberOfMarkedElems > 1) {
+			console.error('Too many marked elements!', parent);
+		}
+		if (numberOfMarkedElems == 0) {
+			var node = generator(data, name);
+			var next = parent.nextSibling;
+			if (next) {
+				parent.parentNode.insertBefore(node, next);
+			} else {
+				parent.parentNode.appendChild(node);
+			}
+			mark(elem, name);
+		} else {
+			var nextRow = parent.nextSibling;
+			parent.parentNode.removeChild(nextRow);
+			unmark(marked[0], name);
+			toggleInfoBlock(elem, parent, data, generator);
+		}
+
+	}
+
+}
+
+/**
+ * Return class names of the given node.
+ * 
+ * @param node
+ * @returns array of strings, might be empty if no class names are found or null
+ *          if no node is given.
+ */
+function getClassNames(node) {
+	if (node) {
+		var classAttrName = 'class';
+		var classNames = node.getAttribute(classAttrName) || "";
+		return classNames.split(/\s+/).filter(function(n) {
+			return n != '';
+		});
+
+	}
+}
+
+/**
+ * Mark the element by adding the class name to its class names (if any).
+ * 
+ * @param elem
+ * @param name
+ */
+function mark(elem, marker) {
+	if (elem && !hasClass(elem, marker)) {
+		var names = getClassNames(elem) || [];
+		names.push(marker);
+		elem.setAttribute('class', names.join(' '));
+	}
+}
+
+/**
+ * Remove the marker from the elem's class names.
+ * 
+ * @param elem
+ * @param marker
+ */
+function unmark(elem, marker) {
+	if (elem && hasClass(elem, marker)) {
+		var names = getClassNames(elem) || [];
+		var filteredOut = names.filter(function(n) {
+			return n != marker;
+		});
+		elem.setAttribute('class', filteredOut.join(' '));
+	}
 }
 
 function initTable() {
@@ -118,9 +195,6 @@ function initTable() {
 
 				},
 				"createdRow" : function(row, data, index) {
-					// console.log("row", row);
-					// console.log("data", data);
-					// console.log("index", index);
 					var name = "highlight";
 					if (data['mansion'] == 'programmer') {
 						console.log('row found: ' + index);
@@ -130,14 +204,16 @@ function initTable() {
 							row.className += " " + name;
 							console.log("row", row);
 						}
-						row.querySelector('.name').addEventListener('click',
+						row.querySelector('.name').addEventListener(
+								'click',
 								function(e) {
-									toggleInfoBlock(row, data, createNameData);
+									toggleInfoBlock(this, row, data,
+											createNameData);
 								}, true);
 						row.querySelector('.surname').addEventListener(
 								'click',
 								function(e) {
-									toggleInfoBlock(row, data,
+									toggleInfoBlock(this, row, data,
 											createSurnameData);
 								});
 
@@ -174,11 +250,6 @@ function requestPositions() {
 	return $.ajax({
 		url : '/datatable/consumer/data/positions',
 		type : 'GET'
-	}).then(function(data) {
-		console.log('positions received: ', data);
-		fillIn(positionNode, data);
-	}, function(data) {
-		console.error('branches are NOT received', data);
 	});
 
 }
@@ -213,8 +284,9 @@ $(document).ready(function() {
 		};
 	})();
 
-	$.when(requestPositions()).done(function() {
-		console.log('positions are loaded');
+	$.when(requestPositions()).then(function(v) {
+		console.log('positions are loaded', v);
+		fillIn(positionNode, v);
 	});
 
 });
