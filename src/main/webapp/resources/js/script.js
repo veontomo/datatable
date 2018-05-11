@@ -1,5 +1,6 @@
 var positionNode = document.getElementById('position');
 var control = document.querySelector('form[name="control"]');
+var templateNode = document.getElementById('template');
 
 /**
  * Return true if the element exists and has given class name.
@@ -30,20 +31,14 @@ function hasClass(elem, name) {
  * @returns
  */
 function generateInfoBlock(data, label) {
-	var row = document.createElement('tr');
-	row.className = 'info-box';
-	var cell = document.createElement('td');
-	cell.colSpan = 4;
-	for ( var key in data) {
-		if (data.hasOwnProperty(key)) {
-			var d = document.createElement('div');
-			d.appendChild(document.createTextNode(key + ": " + data[key]));
-			cell.appendChild(d);
-
-		}
+	var template = templateNode.cloneNode(true);
+	var row = template.querySelector('tr');
+	console.log(row);
+	if (row) {
+		mark(row, label);
+		return row;
 	}
-	row.appendChild(cell);
-	return row;
+	console.log('return nothing');
 }
 
 /**
@@ -56,7 +51,8 @@ function createSurnameData(data) {
 	var node = generateInfoBlock({
 		surname : data.surname
 	}, className);
-	node.className += ' surname-box';
+	mark(node, 'surname-box');
+	console.log('create surname data returns', node);
 	return node;
 }
 
@@ -70,7 +66,8 @@ function createNameData(data) {
 	var node = generateInfoBlock({
 		name : data.name
 	}, className);
-	node.className += ' name-box';
+	mark(node, 'name-box');
+	console.log('create name data returns', node);
 	return node;
 }
 
@@ -107,6 +104,7 @@ function toggleInfoBlock(elem, parent, data, generator) {
 			var node = generator(data, name);
 			var next = parent.nextSibling;
 			if (next) {
+				console.log(node, next, parent);
 				parent.parentNode.insertBefore(node, next);
 			} else {
 				parent.parentNode.appendChild(node);

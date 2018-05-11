@@ -31,6 +31,24 @@
 			</tr>
 		</thead>
 	</table>
+	<table id="template" style="display: none;">
+		<tr colspan="4">
+			<td>
+				<table class="name">
+					<tr>
+						<td class="template-name"></td>
+					</tr>
+
+				</table>
+				<table class="surname">
+					<tr>
+						<td class="template-surname"></td>
+					</tr>
+
+				</table>
+			</td>
+		</tr>
+	</table>
 	<script type="text/javascript"
 		src="<c:url value="/resources/js/script.js"/>"></script>
 
