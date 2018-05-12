@@ -34,15 +34,15 @@
 	<table id="template" style="display: none;">
 		<tr colspan="4">
 			<td>
-				<table class="name">
+				<table class="name template-item">
 					<tr>
-						<td class="template-name"></td>
+						<td class="template-name">name</td>
 					</tr>
 
 				</table>
-				<table class="surname">
+				<table class="surname template-item">
 					<tr>
-						<td class="template-surname"></td>
+						<td class="template-surname">Surname</td>
 					</tr>
 
 				</table>

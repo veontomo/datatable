@@ -72,6 +72,44 @@ function createNameData(data) {
 }
 
 /**
+ * Return the elements that are present in both arrays.
+ * 
+ * @param src
+ *            array
+ * @param filter
+ *            array
+ * @returns array
+ */
+function intersect(src, filter) {
+	console.log(src, filter);
+	return src.filter(function(e) {
+		return filter.indexOf(e) != -1;
+	});
+}
+
+/**
+ * Make visible those elements whose class attribute contains the marker
+ * 
+ * @param elems
+ * @param marker
+ * @returns
+ */
+function highlight(elems, marker) {
+	console.log('highlight', elems, marker);
+	elems.forEach(function(e) {
+		var names = getClassNames(e);
+		console.log(e, names);
+		if (names.indexOf(marker) != -1) {
+			console.log('set style to block');
+			e.style.display = 'block';
+		} else {
+			console.log('set style to none');
+			e.style.display = 'none';
+		}
+	});
+}
+
+/**
  * 
  * Add or remove an info block as a next child parent node.
  * 
@@ -85,40 +123,88 @@ function createNameData(data) {
  * @returns
  */
 function toggleInfoBlock(elem, parent, data, generator) {
-	var name = 'active';
-	if (hasClass(elem, name)) {
-		var nextRow = parent.nextSibling;
-		parent.parentNode.removeChild(nextRow);
-		unmark(elem, name);
+	console.log('toggle info block', elem, parent, data);
+	var marker = 'info-block';
+	if (hasClass(parent.nextSibling, marker)) {
 
 	} else {
-		var siblings = parent.childNodes;
-		var marked = $(siblings).toArray().filter(function(n) {
-			return hasClass(n, name);
-		});
-		var numberOfMarkedElems = marked.length;
-		if (numberOfMarkedElems > 1) {
-			console.error('Too many marked elements!', parent);
-		}
-		if (numberOfMarkedElems == 0) {
-			var node = generator(data, name);
-			var next = parent.nextSibling;
-			if (next) {
-				console.log(node, next, parent);
-				parent.parentNode.insertBefore(node, next);
-			} else {
-				parent.parentNode.appendChild(node);
+		var newNode = insertAfter(generateInfoBlock(data), parent);
+		console.log('new node', newNode);
+		if (newNode) {
+			mark(newNode, marker);
+			var markers = intersect(getClassNames(elem), [ 'name', 'surname' ]);
+			console.log('found markers', markers);
+			if (markers.length == 1) {
+				var items = newNode.getElementsByClassName('template-item');
+				console.log('items', items);
+				var items = $(items).toArray();
+				highlight(items, markers[0]);
 			}
-			mark(elem, name);
-		} else {
-			var nextRow = parent.nextSibling;
-			parent.parentNode.removeChild(nextRow);
-			unmark(marked[0], name);
-			toggleInfoBlock(elem, parent, data, generator);
 		}
-
 	}
+	// var name = 'active';
+	// if (hasClass(elem, name)) {
+	// var nextRow = parent.nextSibling;
+	// parent.parentNode.removeChild(nextRow);
+	// unmark(elem, name);
+	//
+	// } else {
+	// var siblings = parent.childNodes;
+	// var marked = $(siblings).toArray().filter(function(n) {
+	// return hasClass(n, name);
+	// });
+	// var numberOfMarkedElems = marked.length;
+	// if (numberOfMarkedElems > 1) {
+	// console.error('Too many marked elements!', parent);
+	// }
+	// if (numberOfMarkedElems == 0) {
+	// var node = generator(data, name);
+	// var next = parent.nextSibling;
+	// if (next) {
+	// console.log(node, next, parent);
+	// parent.parentNode.insertBefore(node, next);
+	// } else {
+	// parent.parentNode.appendChild(node);
+	// }
+	// mark(elem, name);
+	// } else {
+	// var nextRow = parent.nextSibling;
+	// parent.parentNode.removeChild(nextRow);
+	// unmark(marked[0], name);
+	// toggleInfoBlock(elem, parent, data, generator);
+	// }
+	//
+	// }
 
+}
+
+/**
+ * Whether the node is a
+ * 
+ * @param node
+ * @returns
+ */
+function isInfoBlock(node) {
+
+}
+
+/**
+ * Insert a new node after existing one.
+ * 
+ * @param newNode
+ * @param existingNode
+ * @returns newly inserted node
+ */
+function insertAfter(newNode, existingNode) {
+	var parent = existingNode.parentNode;
+	if (parent) {
+		var beforeNode = existingNode.nextSibling;
+		if (beforeNode) {
+			return parent.insertBefore(newNode, beforeNode);
+		} else {
+			return parent.appendChild(newNode);
+		}
+	}
 }
 
 /**
