@@ -31,7 +31,7 @@
 			</tr>
 		</thead>
 	</table>
-	<table id="template" style="display: none;">
+	<table id="template" class="template-invisible">
 		<tr colspan="4">
 			<td>
 				<table class="name template-item">

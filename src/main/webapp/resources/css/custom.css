@@ -30,6 +30,17 @@ table.dataTable thead .sorting_asc_disabled {
 }
 
 table.dataTable thead .sorting_desc_disabled {
-	background-image:
-		url("../img/sort_desc_disabled.png")
+	background-image: url("../img/sort_desc_disabled.png")
+}
+
+.template-item.template-item-visible {
+	display: block;
+}
+
+.template-item.template-item-invisible {
+	display: none;
+}
+
+.template-invisible {
+	display: none;
 }

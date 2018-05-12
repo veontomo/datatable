@@ -13,12 +13,17 @@ var templateNode = document.getElementById('template');
  * @returns true if the element has requested class name, false otherwise
  */
 function hasClass(elem, name) {
+	console.log('hasClass: ' + name + ' in', elem);
 	if (elem && name) {
 		var names = getClassNames(elem);
+		console.log('classes: ', names);
 		if (names) {
-			return names.indexOf(name) != -1;
+			var ind = names.indexOf(name);
+			console.log('index: ' + ind);
+			return ind != -1;
 		}
 	}
+	console.log('return false');
 	return false;
 }
 
@@ -88,27 +93,42 @@ function intersect(src, filter) {
 }
 
 /**
- * Make visible those elements whose class attribute contains the marker
+ * Make visible those elements whose class attribute contains the marker and
+ * make invisible those elements whose class attribute does not contain the
+ * marker.
  * 
  * @param elems
  * @param marker
- * @returns
  */
 function highlight(elems, marker) {
 	console.log('highlight', elems, marker);
 	elems.forEach(function(e) {
 		var names = getClassNames(e);
-		console.log(e, names);
-		if (names.indexOf(marker) != -1) {
-			console.log('set style to block');
-			e.style.display = 'block';
-		} else {
-			console.log('set style to none');
-			e.style.display = 'none';
-		}
+		setVisibility(e, names.indexOf(marker) != -1);
 	});
 }
 
+/**
+ * Add a class name to the element in order to make visible or invisible.
+ * 
+ * @param e
+ * @param visibility
+ *            true for make the element visible, false - invisible
+ */
+function setVisibility(e, visibility) {
+	console.log('Setting visibility of', e, ' to', visibility);
+	var visibleClass = 'template-item-visible';
+	var invisibleClass = 'template-item-invisible';
+	var isVisible = hasClass(e, visibleClass);
+	if (visibility) {
+		mark(e, visibleClass);
+		unmark(e, invisibleClass);
+	} else {
+		unmark(e, visibleClass);
+		mark(e, invisibleClass);
+
+	}
+}
 /**
  * 
  * Add or remove an info block as a next child parent node.
@@ -124,57 +144,47 @@ function highlight(elems, marker) {
  */
 function toggleInfoBlock(elem, parent, data, generator) {
 	console.log('toggle info block', elem, parent, data);
-	var marker = 'info-block';
-	if (hasClass(parent.nextSibling, marker)) {
+	var next = parent.nextSibling;
+	var infoBlockMarker = 'info-block';
+	var clickedClassNames = intersect(getClassNames(elem),
+			[ 'name', 'surname' ]);
+	if (clickedClassNames.length == 1) {
+		clickedClassName = clickedClassNames[0];
+		console.log('clicked on element with class name: ' + clickedClassName);
+	} else {
+		console.log('Clicked element contains too many class names',
+				clickedClassNames);
+		return;
+	}
+	if (hasClass(next, infoBlockMarker)) {
+		console.log('info block is present', next);
+		var invisibleName = 'template-invisible';
+		unmark(next, invisibleName);
+		var item = next.getElementsByClassName(clickedClassName)[0];
+		console.log('Bound item', item, ' for class name ' + clickedClassName);
+		if (item && !hasClass(item, invisibleName)) {
+			console.log('making', next, 'invisible');
+			mark(next, invisibleName);
+		} else {
+			var items = next.getElementsByClassName('template-item');
+			console.log('items', items);
+			var items = $(items).toArray();
+			highlight(items, clickedClassName);
+		}
 
 	} else {
+		console.log('info block is not present');
 		var newNode = insertAfter(generateInfoBlock(data), parent);
 		console.log('new node', newNode);
 		if (newNode) {
-			mark(newNode, marker);
-			var markers = intersect(getClassNames(elem), [ 'name', 'surname' ]);
-			console.log('found markers', markers);
-			if (markers.length == 1) {
-				var items = newNode.getElementsByClassName('template-item');
-				console.log('items', items);
-				var items = $(items).toArray();
-				highlight(items, markers[0]);
-			}
+			mark(newNode, infoBlockMarker);
+			var items = newNode.getElementsByClassName('template-item');
+			console.log('items', items);
+			var items = $(items).toArray();
+			highlight(items, clickedClassName);
+
 		}
 	}
-	// var name = 'active';
-	// if (hasClass(elem, name)) {
-	// var nextRow = parent.nextSibling;
-	// parent.parentNode.removeChild(nextRow);
-	// unmark(elem, name);
-	//
-	// } else {
-	// var siblings = parent.childNodes;
-	// var marked = $(siblings).toArray().filter(function(n) {
-	// return hasClass(n, name);
-	// });
-	// var numberOfMarkedElems = marked.length;
-	// if (numberOfMarkedElems > 1) {
-	// console.error('Too many marked elements!', parent);
-	// }
-	// if (numberOfMarkedElems == 0) {
-	// var node = generator(data, name);
-	// var next = parent.nextSibling;
-	// if (next) {
-	// console.log(node, next, parent);
-	// parent.parentNode.insertBefore(node, next);
-	// } else {
-	// parent.parentNode.appendChild(node);
-	// }
-	// mark(elem, name);
-	// } else {
-	// var nextRow = parent.nextSibling;
-	// parent.parentNode.removeChild(nextRow);
-	// unmark(marked[0], name);
-	// toggleInfoBlock(elem, parent, data, generator);
-	// }
-	//
-	// }
 
 }
 
@@ -246,7 +256,9 @@ function mark(elem, marker) {
  * @param marker
  */
 function unmark(elem, marker) {
+	console.log('removing ' + marker + ' from class attribute of', elem);
 	if (elem && hasClass(elem, marker)) {
+		console.log('Element contains' + marker + ' among its class names.');
 		var names = getClassNames(elem) || [];
 		var filteredOut = names.filter(function(n) {
 			return n != marker;
