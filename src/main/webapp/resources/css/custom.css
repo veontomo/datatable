@@ -34,13 +34,16 @@ table.dataTable thead .sorting_desc_disabled {
 }
 
 .template-item.template-item-visible {
-	display: block;
+/* 	display: block; */
+	box-shadow: 5px 10px green;
 }
 
 .template-item.template-item-invisible {
-	display: none;
+	/* 	display: none; */
+	box-shadow: 5px 10px #888888;
 }
 
 .template-invisible {
-	display: none;
+/* 	display: none; */
+	box-shadow: 5px 10px red;
 }

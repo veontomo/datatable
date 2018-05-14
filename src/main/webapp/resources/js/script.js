@@ -13,17 +13,13 @@ var templateNode = document.getElementById('template');
  * @returns true if the element has requested class name, false otherwise
  */
 function hasClass(elem, name) {
-	console.log('hasClass: ' + name + ' in', elem);
 	if (elem && name) {
 		var names = getClassNames(elem);
-		console.log('classes: ', names);
 		if (names) {
 			var ind = names.indexOf(name);
-			console.log('index: ' + ind);
 			return ind != -1;
 		}
 	}
-	console.log('return false');
 	return false;
 }
 
@@ -38,7 +34,6 @@ function hasClass(elem, name) {
 function generateInfoBlock(data, label) {
 	var template = templateNode.cloneNode(true);
 	var row = template.querySelector('tr');
-	console.log(row);
 	if (row) {
 		mark(row, label);
 		return row;
@@ -86,7 +81,6 @@ function createNameData(data) {
  * @returns array
  */
 function intersect(src, filter) {
-	console.log(src, filter);
 	return src.filter(function(e) {
 		return filter.indexOf(e) != -1;
 	});
@@ -144,8 +138,9 @@ function setVisibility(e, visibility) {
  */
 function toggleInfoBlock(elem, parent, data, generator) {
 	console.log('toggle info block', elem, parent, data);
-	var next = parent.nextSibling;
 	var infoBlockMarker = 'info-block';
+	var invisibleName = 'template-invisible';
+	var next = parent.nextSibling;
 	var clickedClassNames = intersect(getClassNames(elem),
 			[ 'name', 'surname' ]);
 	if (clickedClassNames.length == 1) {
@@ -158,14 +153,22 @@ function toggleInfoBlock(elem, parent, data, generator) {
 	}
 	if (hasClass(next, infoBlockMarker)) {
 		console.log('info block is present', next);
-		var invisibleName = 'template-invisible';
-		unmark(next, invisibleName);
+		if (hasClass(next, invisibleName)) {
+			console.log(next, 'info block contains class ' + invisibleName
+					+ ', it is to be removed.');
+			unmark(next, invisibleName);
+			console.log('classes of ', next, next.className);
+		} else {
+			console.log('info block is visible');
+		}
 		var item = next.getElementsByClassName(clickedClassName)[0];
 		console.log('Bound item', item, ' for class name ' + clickedClassName);
-		if (item && !hasClass(item, invisibleName)) {
-			console.log('making', next, 'invisible');
-			mark(next, invisibleName);
+		if (!hasClass(item, invisibleName)) {
+			console.log(item, 'is visible');
+			mark(item, invisibleName);
+			console.log(item, 'is made invisible');
 		} else {
+			console.log(item, ' is invisible');
 			var items = next.getElementsByClassName('template-item');
 			console.log('items', items);
 			var items = $(items).toArray();
@@ -185,16 +188,6 @@ function toggleInfoBlock(elem, parent, data, generator) {
 
 		}
 	}
-
-}
-
-/**
- * Whether the node is a
- * 
- * @param node
- * @returns
- */
-function isInfoBlock(node) {
 
 }
 
@@ -245,7 +238,7 @@ function mark(elem, marker) {
 	if (elem && !hasClass(elem, marker)) {
 		var names = getClassNames(elem) || [];
 		names.push(marker);
-		elem.setAttribute('class', names.join(' '));
+		elem.className = names.join(' ');
 	}
 }
 
@@ -256,15 +249,21 @@ function mark(elem, marker) {
  * @param marker
  */
 function unmark(elem, marker) {
-	console.log('removing ' + marker + ' from class attribute of', elem);
-	if (elem && hasClass(elem, marker)) {
-		console.log('Element contains' + marker + ' among its class names.');
+	if (!elem) {
+		console.warn('the first argument is missing in unmark');
+		return;
+	}
+	console.log('before: elem classes', elem.className);
+	if (hasClass(elem, marker)) {
 		var names = getClassNames(elem) || [];
 		var filteredOut = names.filter(function(n) {
 			return n != marker;
 		});
-		elem.setAttribute('class', filteredOut.join(' '));
+		console.log(names, '->', filteredOut);
+		elem.className = filteredOut.join(' ');
+
 	}
+	console.log('after: elem classes', elem.className);
 }
 
 function initTable() {
