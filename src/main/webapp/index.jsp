@@ -9,5 +9,7 @@
 	<a href="/datatable/consumer/clientside">Client-side rendering</a>
 	<br>
 	<a href="/datatable/consumer/serverside">Server-side rendering</a>
+	<br>
+	<a href="/datatable/consumer/upload">Upload</a>
 </body>
 </html>
